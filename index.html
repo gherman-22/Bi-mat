@@ -19,18 +19,30 @@
 </div>
 
 <script>
-function go(page,answer){
-  const name=document.getElementById("name").value || "Ẩn danh";
-  const data=JSON.parse(localStorage.getItem("logs")||"[]");
-  data.push({name,answer,time:new Date().toLocaleString()});
-  localStorage.setItem("logs",JSON.stringify(data));
+function go(page, answer){
+  const name =
+    document.getElementById("name").value || "Ẩn danh";
 
-  localStorage.setItem("userName",name);
-  localStorage.setItem("answer",answer);
-  location.href=page;
+  const formURL =
+  "https://docs.google.com/forms/d/1oiVtOm7MiWspttFcKhuH6nmnb3cYfdJlaF9gydmAssY/formRespones"; // ← LINK FORM
+  
+  const data = new FormData();
+  data.append("entry.1397404752", name);   // ← ID TÊN
+  data.append("entry.1575105345", answer); // ← ID ĐÁP ÁN
+
+  fetch(formURL,{
+    method:"POST",
+    mode:"no-cors",
+    body:data
+  });
+
+  localStorage.setItem("userName", name);
+  localStorage.setItem("answer", answer);
+
+  location.href = page;
 }
-
 </script>
+  
 
 </body>
 <script>
