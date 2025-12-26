@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="box">
+  <h2>🔐 ADMIN</h2>
+  <ul id="list"></ul>
+</div>
+
+<script>
+const list=document.getElementById("list");
+const data=JSON.parse(localStorage.getItem("logs")||"[]");
+
+if(data.length===0){
+  list.innerHTML="<li>Chưa có dữ liệu</li>";
+}else{
+  data.forEach(d=>{
+    const li=document.createElement("li");
+    li.innerText=`${d.name} → ${d.answer} (${d.time})`;
+    list.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>

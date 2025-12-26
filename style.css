@@ -1,0 +1,42 @@
+body{
+    margin:0;
+    height:100vh;
+    background:
+      radial-gradient(circle at 20% 20%, #444, transparent 40%),
+      radial-gradient(circle at 80% 30%, #333, transparent 40%),
+      radial-gradient(circle at 50% 80%, #222, transparent 40%),
+      #000;
+    color:white;
+    font-family:sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+.box{
+    background:rgba(0,0,0,0.6);
+    padding:25px;
+    border-radius:16px;
+    width:85%;
+    max-width:320px;
+}
+button{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:20px;
+    font-size:16px;
+}
+input{
+    width:100%;
+    padding:10px;
+    border-radius:20px;
+    border:none;
+}
+#stars{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+}
+
