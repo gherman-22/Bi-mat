@@ -24,11 +24,11 @@ function go(page, answer){
     document.getElementById("name").value || "Ẩn danh";
 
   const formURL =
-  "https://docs.google.com/forms/d/1oiVtOm7MiWspttFcKhuH6nmnb3cYfdJlaF9gydmAssY/edit#responses"; // ← LINK FORM
+  "https://docs.google.com/forms/d/1oiVtOm7MiWspttFcKhuH6nmnb3cYfdJlaF9gydmAssY/formResponse"; 
   
   const data = new FormData();
-  data.append("entry.1397404752", name);   // ← ID TÊN
-  data.append("entry.1575105345", answer); // ← ID ĐÁP ÁN
+  data.append("entry.1397404752", name);   
+  data.append("entry.1575105345", answer); 
 
   fetch(formURL,{
     method:"POST",
