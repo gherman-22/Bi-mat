@@ -6,12 +6,14 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <div class="box">
   
   <h2>Bạn có hay nghĩ về mình không?</h2>
 
 <button onclick="save('rất thích','a2_q1.html')">rất thích</button>
 <button onclick="save('bình thường','a3_end.html')">bình thường</button>
-
+  </div>
 <script>
 function save(answer,nextPage){
   let arr = JSON.parse(localStorage.getItem("answers") || "[]");
@@ -22,4 +24,72 @@ function save(answer,nextPage){
 </script>
 
 </body>
+  <script>
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+const meteors = [];
+
+setInterval(()=>{
+  meteors.push({
+    x: Math.random()*canvas.width,
+    y: 0,
+    vx: 7,
+    vy: 10,
+    life: 0
+  });
+}, 2500);
+
+function drawMeteors(){
+  ctx.strokeStyle="white";
+  meteors.forEach((m,i)=>{
+    ctx.beginPath();
+    ctx.moveTo(m.x,m.y);
+    ctx.lineTo(m.x-20,m.y-30);
+    ctx.stroke();
+
+    m.x+=m.vx;
+    m.y+=m.vy;
+    m.life++;
+    if(m.life>25) meteors.splice(i,1);
+  });
+}
+drawMeteors();
+
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+const stars = Array.from({length:100}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*1.5 + 0.5,
+  s: Math.random()*0.5 + 0.2
+}));
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "white";
+
+  stars.forEach(star=>{
+    star.y += star.s;
+    if(star.y > canvas.height){
+      star.y = 0;
+      star.x = Math.random()*canvas.width;
+    }
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+  drawMeteors();
+
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</html>
 </html>
