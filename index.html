@@ -26,15 +26,15 @@
   <div class="question-box">
     <h2>🌌 Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h2>
 
-    <button onclick="chooseAnswer('a1.html','Chỉ là bạn')">
+    <button class="answer" onclick="chooseAnswer('a1.html','Chỉ là bạn')" disabled>
       🌟 Chỉ là bạn
     </button>
 
-    <button onclick="chooseAnswer('a2_q0.html','Có cảm tình')">
+    <button class="answer" onclick="chooseAnswer('a2.html','Có cảm tình')" disabled>
       💖 Có cảm tình
     </button>
 
-    <button onclick="chooseAnswer('a3_q0.html','Bạn thân')">
+    <button class="answer" onclick="chooseAnswer('a3.html','Bạn thân')" disabled>
       🌙 Bạn thân
     </button>
   </div>
@@ -56,6 +56,7 @@ function saveName() {
     return;
   }
   localStorage.setItem("userName", name);
+  unlockAnswers();
   alert("✅ Đã lưu tên: " + name);
 }
 
@@ -82,6 +83,25 @@ function chooseAnswer(page, answer) {
     location.href = page;
   }, 300);
 }
+
+function lockAnswers() {
+  document.querySelectorAll(".answer").forEach(btn => {
+    btn.disabled = true; // Tất cả nút sẽ bị vô hiệu hóa
+  });
+}
+
+function unlockAnswers() {
+  document.querySelectorAll(".answer").forEach(btn => {
+    btn.disabled = false; // Mở lại các nút đáp án
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  lockAnswers();  // Khóa nút đáp án khi mới vào
+  if (localStorage.getItem("userName")) {
+    unlockAnswers();  // Mở khóa nút khi tên đã được xác nhận
+  }
+});
 </script>
 
 <!-- ===== CANVAS SAO (KHÔNG CHẶN INPUT) ===== -->
