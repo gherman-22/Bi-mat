@@ -1,77 +1,152 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Câu hỏi</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Câu hỏi bí mật 🌌</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: black;
+  color: white;
+  overflow: hidden;
+}
+
+.name-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.name-box input {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+.name-box button {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.box {
+  position: relative;
+  max-width: 420px;
+  margin: 140px auto;
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.box img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.box button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+</style>
 </head>
+
 <body>
-  <canvas id="stars"></canvas>
+
+<!-- NHẬP TÊN -->
 <div class="name-box">
-  <input
-    id="name"
-    type="text"
-    placeholder="Nhập tên của bạn..."
-  />
-  <button onclick="saveName()">Xác nhận tên</button>
+  <input id="name" placeholder="Nhập tên của bạn...">
+  <button onclick="saveName()">Xác nhận</button>
 </div>
 
+<!-- CANVAS -->
+<canvas id="stars"></canvas>
+
+<!-- CÂU HỎI -->
 <div class="box">
+  <img src="img/couple.png" alt="Hình minh hoạ">
+
   <h2>🌌 Bạn tên là gì?</h2>
   <h3>❓ Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h3>
 
   <button onclick="chooseAnswer('a1.html','Chỉ là bạn bình thường')">
     🌟 Chỉ là bạn bình thường thôi? 😁
   </button>
+
   <button onclick="chooseAnswer('a2_q0.html','Bạn thích tôi không?')">
     💖 Bạn nghĩ tôi thích bạn không?
   </button>
+
   <button onclick="chooseAnswer('a3_q0.html','BFF')">
     🌙 BFF, cốt xương máu, huynh đệ?
   </button>
 </div>
 
-  <script>
-    function saveName() {
-      const name = document.getElementById("name").value.trim();
+<!-- LOGIC -->
+<script>
+const SHEET_URL = "https://gherman-22.github.io/Bi-mat";
 
-      if (!name) {
-        alert("⚠️ Bạn phải nhập tên trước!");
-        return;
-      }
+function saveName() {
+  const name = document.getElementById("name").value.trim();
+  if (!name) {
+    alert("⚠️ Bạn chưa nhập tên!");
+    return;
+  }
+  localStorage.setItem("userName", name);
+  alert("✅ Đã lưu tên: " + name);
+}
 
-      localStorage.setItem("userName", name);
-      alert("✅ Đã lưu tên: " + name);
-    }
+function chooseAnswer(page, answer) {
+  const name = localStorage.getItem("userName");
+  if (!name) {
+    alert("⚠️ Vui lòng nhập tên trước!");
+    return;
+  }
 
-    function go(page, answer) {
-      const name = document.getElementById("name").value.trim();
+  fetch(SHEET_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      answer: answer,
+      page: page
+    })
+  }).finally(() => {
+    location.href = page;
+  });
+}
+</script>
 
-      if (!name) {
-        alert("⚠️ Bạn chưa nhập tên!");
-        return;
-      }
-
-      const logs = JSON.parse(localStorage.getItem("logs")) || [];
-
-      logs.push({
-        name: name,
-        answer: answer,
-        time: new Date().toLocaleString()
-      });
-
-      localStorage.setItem("logs", JSON.stringify(logs));
-      localStorage.setItem("answer", answer);
-
-      location.href = page;
-    }
-  </script>
-  
-</body>
+<!-- CANVAS SAO -->
 <script>
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 const meteors = [];
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
 
 setInterval(()=>{
   meteors.push({
@@ -82,6 +157,13 @@ setInterval(()=>{
     life: 0
   });
 }, 2500);
+
+const stars = Array.from({length:100}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*1.5 + 0.5,
+  s: Math.random()*0.5 + 0.2
+}));
 
 function drawMeteors(){
   ctx.strokeStyle="white";
@@ -97,22 +179,6 @@ function drawMeteors(){
     if(m.life>25) meteors.splice(i,1);
   });
 }
-drawMeteors();
-
-
-function resize(){
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-}
-resize();
-addEventListener("resize", resize);
-
-const stars = Array.from({length:100}, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  r: Math.random()*1.5 + 0.5,
-  s: Math.random()*0.5 + 0.2
-}));
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -128,11 +194,12 @@ function animate(){
     ctx.arc(star.x, star.y, star.r, 0, Math.PI*2);
     ctx.fill();
   });
+
   drawMeteors();
-
-
   requestAnimationFrame(animate);
 }
 animate();
 </script>
-</html>
+
+</body>
+  </html>
