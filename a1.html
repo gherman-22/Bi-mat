@@ -20,6 +20,30 @@ document.getElementById("text").innerText=
 `${name} : oke chúng ta là bạn bè bình thường 😁`;
 </script>
 
+<script>
+const formURL =
+"https://docs.google.com/forms/d/e/ID_CUA_BAN/formResponse";
+
+const name = localStorage.getItem("name") || "Ẩn danh";
+const route = localStorage.getItem("route") || "a1";
+const answers = JSON.parse(
+  localStorage.getItem("answers") || "[]"
+).join(" → ");
+
+const data = new FormData();
+data.append("entry.1397404752", name);
+data.append(
+  "entry.1575105345",
+  route + " | " + answers
+);
+
+fetch(formURL,{
+  method:"POST",
+  mode:"no-cors",
+  body:data
+});
+</script>
+  
 </body>
 <script>
 const canvas = document.getElementById("stars");
