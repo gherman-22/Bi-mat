@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Câu hỏi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="stars"></canvas>
+
+<div class="box">
+<h3>Bạn có thích tôi không?</h3>
+
+<button onclick="next('có')">có</button>
+<button onclick="back('Không')">Không</button>
+</div>
+
+<script>
+function next(ans){
+  let a = JSON.parse(localStorage.getItem("answers"));
+  a.push("Q3: " + ans);
+  localStorage.setItem("answers", JSON.stringify(a));
+  location.href = "a2_q2.html";
+}
+function back(ans){
+  let a = JSON.parse(localStorage.getItem("answers"));
+  a.push("Q3: " + ans);
+  localStorage.setItem("answers", JSON.stringify(a));
+  location.href = "a2_q1,1.html";
+}
+</script>
+
+<script>
+function go(page,answer){
+  const name=document.getElementById("name").value || "Ẩn danh";
+  const data=JSON.parse(localStorage.getItem("logs")||"[]");
+  data.push({name,answer,time:new Date().toLocaleString()});
+  localStorage.setItem("logs",JSON.stringify(data));
+
+  localStorage.setItem("userName",name);
+  localStorage.setItem("answer",answer);
+  location.href=page;
+}
+
+</script>
+
+</body>
+<script>
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+const meteors = [];
+
+setInterval(()=>{
+  meteors.push({
+    x: Math.random()*canvas.width,
+    y: 0,
+    vx: 7,
+    vy: 10,
+    life: 0
+  });
+}, 2500);
+
+function drawMeteors(){
+  ctx.strokeStyle="white";
+  meteors.forEach((m,i)=>{
+    ctx.beginPath();
+    ctx.moveTo(m.x,m.y);
+    ctx.lineTo(m.x-20,m.y-30);
+    ctx.stroke();
+
+    m.x+=m.vx;
+    m.y+=m.vy;
+    m.life++;
+    if(m.life>25) meteors.splice(i,1);
+  });
+}
+drawMeteors();
+
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+const stars = Array.from({length:100}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*1.5 + 0.5,
+  s: Math.random()*0.5 + 0.2
+}));
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "white";
+
+  stars.forEach(star=>{
+    star.y += star.s;
+    if(star.y > canvas.height){
+      star.y = 0;
+      star.x = Math.random()*canvas.width;
+    }
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+  drawMeteors();
+
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</html>
+
