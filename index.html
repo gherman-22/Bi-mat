@@ -2,59 +2,53 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Câu hỏi 🌌</title>
+<title>Câu hỏi</title>
 
 <style>
 body {
   margin: 0;
+  font-family: sans-serif;
   background: black;
   color: white;
-  font-family: sans-serif;
   overflow: hidden;
-}
-
-.box {
-  max-width: 420px;
-  margin: 140px auto;
-  background: rgba(0,0,0,0.6);
-  padding: 20px;
-  border-radius: 15px;
-  text-align: center;
-}
-
-.name-box {
-  margin-bottom: 15px;
-}
-
-.name-box input,
-.name-box button {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  margin-bottom: 8px;
-}
-
-.answer-btn {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.answer-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 
 canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+  inset: 0;
+}
+
+.box {
+  position: relative;
+  z-index: 2;
+  width: 320px;
+  margin: 120px auto;
+  padding: 20px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 12px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.answer-btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 </style>
 </head>
@@ -64,73 +58,73 @@ canvas {
 <canvas id="stars"></canvas>
 
 <div class="box">
+  <h3>🌌 Bạn tên là gì?</h3>
+  <input id="nameInput" placeholder="Nhập tên của bạn">
+  <button onclick="saveName()">Xác nhận tên</button>
 
-  <!-- NHẬP TÊN -->
-  <div class="name-box">
-    <input id="name" placeholder="Nhập tên của bạn...">
-    <button onclick="saveName()">Xác nhận</button>
-  </div>
+  <hr>
 
-  <h2>🌌 Bạn tên là gì?</h2>
   <h3>❓ Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h3>
 
-  <button class="answer-btn" disabled
+  <button class="answer-btn"
     onclick="chooseAnswer('a1.html','Chỉ là bạn bình thường')">
-    🌟 Chỉ là bạn bình thường thôi? 😁
+    🌟 Chỉ là bạn bình thường thôi 😁
   </button>
 
-  <button class="answer-btn" disabled
+  <button class="answer-btn"
     onclick="chooseAnswer('a2_q0.html','Bạn nghĩ tôi thích bạn không?')">
     💖 Bạn nghĩ tôi thích bạn không?
   </button>
 
-  <button class="answer-btn" disabled
-    onclick="chooseAnswer('a3_q0.html','BFF, cốt xương máu, huynh đệ')">
-    🌙 BFF, cốt xương máu, huynh đệ?
+  <button class="answer-btn"
+    onclick="chooseAnswer('a3_q0.html','BFF')">
+    🌙 BFF – huynh đệ
   </button>
-
 </div>
 
-<!-- GOOGLE FORM + LOGIC -->
 <script>
+/* ===== GOOGLE FORM (ĐÃ ĐIỀN) ===== */
 const FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
-// nếu đã có tên từ trước → mở nút luôn
-window.onload = () => {
-  if (localStorage.getItem("userName")) {
-    enableAnswers();
-  }
-};
-
-function saveName() {
-  const name = document.getElementById("name").value.trim();
-
-  if (!name) {
-    alert("⚠️ Bạn chưa nhập tên!");
-    return;
-  }
-
-  localStorage.setItem("userName", name);
-  enableAnswers();
-  alert("✅ Chào " + name + " 🌙");
+/* ===== KHÓA / MỞ ĐÁP ÁN ===== */
+function lockAnswers() {
+  document.querySelectorAll(".answer-btn").forEach(btn => {
+    btn.disabled = true;
+  });
 }
 
-function enableAnswers() {
+function unlockAnswers() {
   document.querySelectorAll(".answer-btn").forEach(btn => {
     btn.disabled = false;
   });
 }
 
+/* ===== LOAD TRANG ===== */
+window.addEventListener("DOMContentLoaded", () => {
+  lockAnswers();
+  if (localStorage.getItem("userName")) {
+    unlockAnswers();
+  }
+});
+
+/* ===== LƯU TÊN ===== */
+function saveName() {
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) return;
+
+  localStorage.setItem("userName", name);
+  unlockAnswers();
+}
+
+/* ===== CHỌN ĐÁP ÁN ===== */
 function chooseAnswer(page, answer) {
   const name = localStorage.getItem("userName");
-
-  // nếu chưa có tên → thoát im lặng
   if (!name) return;
 
   const data = new URLSearchParams();
-  data.append("entry.1397404752", name);
-  data.append("entry.1575105345", answer);
+  data.append("entry.1397404752", name);    // TÊN
+  data.append("entry.1575105345", answer); // ĐÁP ÁN
 
   fetch(FORM_URL, {
     method: "POST",
@@ -140,14 +134,12 @@ function chooseAnswer(page, answer) {
 
   location.href = page;
 }
-  
 </script>
 
-<!-- CANVAS SAO -->
 <script>
+/* ===== BACKGROUND SAO ===== */
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
-const meteors = [];
 
 function resize(){
   canvas.width = innerWidth;
@@ -156,37 +148,12 @@ function resize(){
 resize();
 addEventListener("resize", resize);
 
-setInterval(()=>{
-  meteors.push({
-    x: Math.random()*canvas.width,
-    y: 0,
-    vx: 7,
-    vy: 10,
-    life: 0
-  });
-}, 2500);
-
 const stars = Array.from({length:100}, () => ({
   x: Math.random()*canvas.width,
   y: Math.random()*canvas.height,
   r: Math.random()*1.5 + 0.5,
   s: Math.random()*0.5 + 0.2
 }));
-
-function drawMeteors(){
-  ctx.strokeStyle="white";
-  meteors.forEach((m,i)=>{
-    ctx.beginPath();
-    ctx.moveTo(m.x,m.y);
-    ctx.lineTo(m.x-20,m.y-30);
-    ctx.stroke();
-
-    m.x+=m.vx;
-    m.y+=m.vy;
-    m.life++;
-    if(m.life>25) meteors.splice(i,1);
-  });
-}
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -203,11 +170,10 @@ function animate(){
     ctx.fill();
   });
 
-  drawMeteors();
   requestAnimationFrame(animate);
 }
 animate();
 </script>
 
 </body>
-  </html>
+</html>
