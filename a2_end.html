@@ -14,7 +14,7 @@
 </div>
 
 <script>
-const name = "Bảo"
+const name = localStorage.getItem("userName") || "Bạn";
 document.getElementById("title").innerText =
 `${name}, mình thật sự muốn nói…`;
 
