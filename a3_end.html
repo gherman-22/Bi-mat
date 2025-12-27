@@ -14,12 +14,13 @@
 </div>
 
 <script>
-const name="Bảo"
-const ans=localStorage.getItem("answer");
-document.getElementById("text").innerText=
-`${name} : chúng ta mặc dù không sinh cùng ngày cùng tháng nhưng sinh tử có nhau cốt à! 💪`;
-</script>
+const name = localStorage.getItem("name") || "Ẩn danh";
+const ans = localStorage.getItem("route") || "a1";
 
+document.getElementById("text").innerText =
+`${name} : à, Bảo: mặc dù chúng ta không sinh cùng ngày cùng tháng cùng năm nhưng sinh tử có nhau mấy huynh đệ à 💪`;
+</script>
+  
 <script>
 const formURL =
 "https://docs.google.com/forms/d/e/ID_CUA_BAN/formResponse";
