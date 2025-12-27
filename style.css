@@ -73,3 +73,6 @@ input{
   pointer-events: none;   /* CHẶN CLICK TUYỆT ĐỐI */
   opacity: 0.4;
     }
+canvas {
+  pointer-events: none;
+}
