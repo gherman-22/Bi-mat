@@ -6,12 +6,13 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="box">
+  
+  <h2>Bạn có hay nghĩ về mình không?</h2>
 
-<h2>Bạn có hay nghĩ về mình không?</h2>
-
-<button onclick="save('Có','a2_q1.html')">rất thích</button>
-<button onclick="save('Không','a3_end.html')">bình thường</button>
-
+  <button onclick="save('rất thích','a2_q1.html')">rất thích</button>
+  <button onclick="save('bình thường','a3_end.html')">bình thường</button>
+</div>
 <script>
 function save(answer,nextPage){
   let arr = JSON.parse(localStorage.getItem("answers") || "[]");
