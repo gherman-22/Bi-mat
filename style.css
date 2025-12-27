@@ -1,82 +1,16 @@
-body{
-    margin:0;
-    height:100vh;
-    background:
-      radial-gradient(circle at 20% 20%, #444, transparent 40%),
-      radial-gradient(circle at 80% 30%, #333, transparent 40%),
-      radial-gradient(circle at 50% 80%, #222, transparent 40%),
-      #000;
-    color:white;
-    font-family:sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-}
-.box{
-    background:rgba(0,0,0,0.6);
-    padding:25px;
-    border-radius:16px;
-    width:85%;
-    max-width:320px;
-}
-button{
-    width:100%;
-    margin-top:10px;
-    padding:10px;
-    border:none;
-    border-radius:20px;
-    font-size:16px;
-}
-input{
-    width:100%;
-    padding:10px;
-    border-radius:20px;
-    border:none;
-}
-#stars{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-}
-/* === FIX layout name box + question box === */
-
-.box {
-  max-width: 420px;
-  margin: 120px auto;
-  padding: 20px;
-  border-radius: 15px;
-  background: rgba(0,0,0,0.6);
-  text-align: center;
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-.name-box {
-  margin-bottom: 15px;
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  overflow: hidden;
 }
 
-.name-box input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  margin-bottom: 8px;
-}
-
-.name-box button {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-    }
-.answer-btn:disabled {
-  pointer-events: none;   /* CHẶN CLICK TUYỆT ĐỐI */
-  opacity: 0.4;
-    }
-canvas {
-  pointer-events: none;
-}
-/* FIX: canvas không che input */
+/* CANVAS */
 #stars {
   position: fixed;
   inset: 0;
@@ -84,30 +18,39 @@ canvas {
   pointer-events: none;
 }
 
-/* FIX: ô nhập tên nằm trên canvas */
-.name-box {
+/* CONTENT */
+.container {
   position: relative;
   z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
-/* FIX: box câu hỏi nằm trên canvas */
+.name-box,
 .question-box {
-  position: relative;
-  z-index: 10;
-    }
-input,
-button {
-  position: relative;
-  z-index: 9999;
-}
-/* FORCE FIX INPUT KHÔNG GÕ ĐƯỢC */
-body {
-  pointer-events: auto !important;
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
 }
 
-input,
+input {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  width: 220px;
+  margin-bottom: 10px;
+}
+
 button {
-  pointer-events: auto !important;
-  position: relative;
-  z-index: 99999;
-    }
+  display: block;
+  margin: 8px auto;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
