@@ -125,15 +125,12 @@ function enableAnswers() {
 function chooseAnswer(page, answer) {
   const name = localStorage.getItem("userName");
 
-  // CHẶN CỨNG – KHÔNG CÓ ẨN DANH
-  if (!name) {
-    alert("⚠️ Bạn phải nhập tên trước khi chọn đáp án!");
-    return;
-  }
+  // nếu chưa có tên → thoát im lặng
+  if (!name) return;
 
   const data = new URLSearchParams();
-  data.append("entry.1397404752", name);     // Tên
-  data.append("entry.1575105345", answer);   // Đáp án
+  data.append("entry.1397404752", name);
+  data.append("entry.1575105345", answer);
 
   fetch(FORM_URL, {
     method: "POST",
@@ -143,6 +140,7 @@ function chooseAnswer(page, answer) {
 
   location.href = page;
 }
+  
 </script>
 
 <!-- CANVAS SAO -->
