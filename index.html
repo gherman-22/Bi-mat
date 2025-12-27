@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Câu hỏi 🌌</title>
-<link rel="stylesheet" href="style.css">
+
 <style>
 body {
   margin: 0;
@@ -35,13 +35,19 @@ body {
   margin-bottom: 8px;
 }
 
-.box button {
+.answer-btn {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  font-size: 15px;
+}
+
+.answer-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 canvas {
@@ -68,41 +74,66 @@ canvas {
   <h2>🌌 Bạn tên là gì?</h2>
   <h3>❓ Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h3>
 
-  <button onclick="chooseAnswer('a1.html','Chỉ là bạn bình thường')">
+  <button class="answer-btn" disabled
+    onclick="chooseAnswer('a1.html','Chỉ là bạn bình thường')">
     🌟 Chỉ là bạn bình thường thôi? 😁
   </button>
 
-  <button onclick="chooseAnswer('a2_q0.html','Bạn nghĩ tôi thích bạn không?')">
+  <button class="answer-btn" disabled
+    onclick="chooseAnswer('a2_q0.html','Bạn nghĩ tôi thích bạn không?')">
     💖 Bạn nghĩ tôi thích bạn không?
   </button>
 
-  <button onclick="chooseAnswer('a3_q0.html','BFF, cốt xương máu, huynh đệ')">
+  <button class="answer-btn" disabled
+    onclick="chooseAnswer('a3_q0.html','BFF, cốt xương máu, huynh đệ')">
     🌙 BFF, cốt xương máu, huynh đệ?
   </button>
 
 </div>
 
-<!-- LOGIC GOOGLE FORM -->
+<!-- GOOGLE FORM + LOGIC -->
 <script>
 const FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
+// nếu đã có tên từ trước → mở nút luôn
+window.onload = () => {
+  if (localStorage.getItem("userName")) {
+    enableAnswers();
+  }
+};
+
 function saveName() {
   const name = document.getElementById("name").value.trim();
+
   if (!name) {
     alert("⚠️ Bạn chưa nhập tên!");
     return;
   }
+
   localStorage.setItem("userName", name);
-  alert("✅ Đã lưu tên: " + name);
+  enableAnswers();
+  alert("✅ Chào " + name + " 🌙");
+}
+
+function enableAnswers() {
+  document.querySelectorAll(".answer-btn").forEach(btn => {
+    btn.disabled = false;
+  });
 }
 
 function chooseAnswer(page, answer) {
-  const name = localStorage.getItem("userName") || "Ẩn danh";
+  const name = localStorage.getItem("userName");
+
+  // CHẶN CỨNG – KHÔNG CÓ ẨN DANH
+  if (!name) {
+    alert("⚠️ Bạn phải nhập tên trước khi chọn đáp án!");
+    return;
+  }
 
   const data = new URLSearchParams();
-  data.append("entry.1397404752", name);    // Name
-  data.append("entry.1575105345", answer);  // Đáp án
+  data.append("entry.1397404752", name);     // Tên
+  data.append("entry.1575105345", answer);   // Đáp án
 
   fetch(FORM_URL, {
     method: "POST",
