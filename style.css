@@ -76,3 +76,22 @@ input{
 canvas {
   pointer-events: none;
 }
+/* FIX: canvas không che input */
+#stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* FIX: ô nhập tên nằm trên canvas */
+.name-box {
+  position: relative;
+  z-index: 10;
+}
+
+/* FIX: box câu hỏi nằm trên canvas */
+.question-box {
+  position: relative;
+  z-index: 10;
+    }
