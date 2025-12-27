@@ -40,7 +40,35 @@ function go(page,answer){
 }
 
 </script>
+  
+<script>
+function saveName() {
+  const name = document.getElementById("nameInput").value.trim();
 
+  if (!name) {
+    alert("⚠️ Bạn phải nhập tên trước!");
+    return;
+  }
+
+  localStorage.setItem("name", name);
+  alert("✅ Đã lưu tên: " + name);
+}
+
+function chooseAnswer(route) {
+  const name = localStorage.getItem("name");
+
+  if (!name) {
+    alert("⚠️ Vui lòng nhập tên trước khi chọn đáp án!");
+    return;
+  }
+
+  localStorage.setItem("route", route);
+  localStorage.setItem("answers", JSON.stringify([route]));
+
+  window.location.href = route + "_q0.html";
+}
+</script>
+  
 </body>
 <script>
 const canvas = document.getElementById("stars");
