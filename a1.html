@@ -14,11 +14,13 @@
 </div>
 
 <script>
-const name="Bảo"
-const ans=localStorage.getItem("answer");
-document.getElementById("text").innerText=
-`${name} : oke chúng ta là bạn bè bình thường 😁`;
+const name = localStorage.getItem("name") || "Ẩn danh";
+const ans = localStorage.getItem("route") || "a1";
+
+document.getElementById("text").innerText =
+`${name} : à, Bảo: oke chúng ta là bạn bè bình thường 😁`;
 </script>
+
 
 <script>
 const formURL =
