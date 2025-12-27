@@ -100,3 +100,14 @@ button {
   position: relative;
   z-index: 9999;
 }
+/* FORCE FIX INPUT KHÔNG GÕ ĐƯỢC */
+body {
+  pointer-events: auto !important;
+}
+
+input,
+button {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 99999;
+    }
