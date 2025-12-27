@@ -7,30 +7,45 @@
 </head>
 <body>
 
+<!-- NỀN SAO -->
 <canvas id="stars"></canvas>
 
 <div class="container">
 
+  <!-- NHẬP TÊN -->
   <div class="name-box">
-    <input id="nameInput" type="text" placeholder="Nhập tên của bạn..." />
+    <input
+      id="nameInput"
+      type="text"
+      placeholder="Nhập tên của bạn..."
+    />
     <button onclick="saveName()">Xác nhận tên</button>
   </div>
 
+  <!-- CÂU HỎI -->
   <div class="question-box">
     <h2>🌌 Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h2>
 
-    <button onclick="chooseAnswer('Chỉ là bạn')">🌟 Chỉ là bạn</button>
-    <button onclick="chooseAnswer('Có cảm tình')">💖 Có cảm tình</button>
-    <button onclick="chooseAnswer('Bạn thân')">🌙 Bạn thân</button>
+    <button onclick="chooseAnswer('a1.html','Chỉ là bạn')">
+      🌟 Chỉ là bạn
+    </button>
+
+    <button onclick="chooseAnswer('a2_q0.html','Có cảm tình')">
+      💖 Có cảm tình
+    </button>
+
+    <button onclick="chooseAnswer('a3_q0.html','Bạn thân')">
+      🌙 Bạn thân
+    </button>
   </div>
 
 </div>
 
+<!-- ===== LOGIC ===== -->
 <script>
 const FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
-// 🔴 THAY 2 ID NÀY BẰNG ENTRY CỦA BẠN
 const ENTRY_NAME = "entry.1397404752";
 const ENTRY_ANSWER = "entry.1575105345";
 
@@ -44,7 +59,7 @@ function saveName() {
   alert("✅ Đã lưu tên: " + name);
 }
 
-function chooseAnswer(answer) {
+function chooseAnswer(page, answer) {
   const name = localStorage.getItem("userName");
 
   if (!name) {
@@ -62,12 +77,15 @@ function chooseAnswer(answer) {
     body: data
   });
 
-  alert("💌 Cảm ơn bạn đã trả lời");
+  // chuyển trang như cũ
+  setTimeout(() => {
+    location.href = page;
+  }, 300);
 }
 </script>
 
+<!-- ===== CANVAS SAO (KHÔNG CHẶN INPUT) ===== -->
 <script>
-/* ===== CANVAS SAO (KHÔNG CHẶN INPUT) ===== */
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 
