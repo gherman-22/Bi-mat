@@ -1,73 +1,71 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Câu hỏi</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Câu hỏi</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="name-box">
   <input
-    id="nameInput"
+    id="name"
     type="text"
     placeholder="Nhập tên của bạn..."
   />
   <button onclick="saveName()">Xác nhận tên</button>
-  </div>
-  
-  <canvas id="stars"></canvas>
+</div>
 
 <div class="box">
   <h2>🌌 Bạn tên là gì?</h2>
-  <input id="name" placeholder="Nhập tên của bạn">
   <h3>❓ Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h3>
 
-  <button onclick="chooseAnswer('a1.html','Đáp án 1')">🌟 Chỉ là bạn bình thường thôi? 😁</button>
-  <button onclick="chooseAnswer('a2_q0.html','Bạn thích tôi không?')">💖 Bạn nghĩ tôi thích bạn không?</button>
-  <button onclick="chooseAnswer('a3_q0.html','Đáp án 3')">🌙 BFF, cốt xương máu, huynh đệ?</button>
+  <button onclick="chooseAnswer('a1.html','Chỉ là bạn bình thường')">
+    🌟 Chỉ là bạn bình thường thôi? 😁
+  </button>
+  <button onclick="chooseAnswer('a2_q0.html','Bạn thích tôi không?')">
+    💖 Bạn nghĩ tôi thích bạn không?
+  </button>
+  <button onclick="chooseAnswer('a3_q0.html','BFF')">
+    🌙 BFF, cốt xương máu, huynh đệ?
+  </button>
 </div>
 
-<script>
-function go(page,answer){
-  const name=document.getElementById("name").value || "Ẩn danh";
-  const data=JSON.parse(localStorage.getItem("logs")||"[]");
-  data.push({name,answer,time:new Date().toLocaleString()});
-  localStorage.setItem("logs",JSON.stringify(data));
+  <script>
+    function saveName() {
+      const name = document.getElementById("name").value.trim();
 
-  localStorage.setItem("userName",name);
-  localStorage.setItem("answer",answer);
-  location.href=page;
-  window.location.href = nextPage;
-}
+      if (!name) {
+        alert("⚠️ Bạn phải nhập tên trước!");
+        return;
+      }
 
-</script>
-  
-<script>
-function saveName() {
-  const name = document.getElementById("nameInput").value.trim();
+      localStorage.setItem("userName", name);
+      alert("✅ Đã lưu tên: " + name);
+    }
 
-  if (!name) {
-    alert("⚠️ Bạn phải nhập tên trước!");
-    return;
-  }
+    function go(page, answer) {
+      const name = document.getElementById("name").value.trim();
 
-  localStorage.setItem("name", name);
-  alert("✅ Đã lưu tên: " + name);
-}
+      if (!name) {
+        alert("⚠️ Bạn chưa nhập tên!");
+        return;
+      }
 
-function chooseAnswer(route) {
-  const name = localStorage.getItem("name");
+      const logs = JSON.parse(localStorage.getItem("logs")) || [];
 
-  if (!name) {
-    alert("⚠️ Vui lòng nhập tên trước khi chọn đáp án!");
-    return;
-  }
+      logs.push({
+        name: name,
+        answer: answer,
+        time: new Date().toLocaleString()
+      });
 
-  localStorage.setItem("route", route);
-  localStorage.setItem("answers", JSON.stringify([route]));
+      localStorage.setItem("logs", JSON.stringify(logs));
+      localStorage.setItem("answer", answer);
 
-}
-</script>
+      location.href = page;
+    }
+  </script>
   
 </body>
 <script>
