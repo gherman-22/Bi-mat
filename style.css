@@ -69,3 +69,7 @@ input{
   border: none;
   cursor: pointer;
     }
+.answer-btn:disabled {
+  pointer-events: none;   /* CHẶN CLICK TUYỆT ĐỐI */
+  opacity: 0.4;
+    }
