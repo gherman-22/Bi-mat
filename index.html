@@ -56,29 +56,30 @@ button {
 <body>
 
 <canvas id="stars"></canvas>
+ <div class="name-box">
+  <input
+    type="text"
+    id="nameInput"
+    placeholder="Nhập tên của bạn..."
+  >
+  <button onclick="saveName()">Xác nhận</button>
+</div>
 
-<div class="box">
-  <h3>🌌 Bạn tên là gì?</h3>
-  <input id="nameInput" placeholder="Nhập tên của bạn">
-  <button onclick="saveName()">Xác nhận tên</button>
+<div class="question-box">
+  <h2>Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h2>
 
-  <hr>
-
-  <h3>❓ Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h3>
-
-  <button class="answer-btn"
-    onclick="chooseAnswer('a1.html','Chỉ là bạn bình thường')">
-    🌟 Chỉ là bạn bình thường thôi 😁
+  <button class="answer" disabled onclick="chooseAnswer('a1.html','A')">
+    ⭐ Chỉ là bạn bình thường thôi?
   </button>
 
-  <button class="answer-btn"
-    onclick="chooseAnswer('a2_q0.html','Bạn nghĩ tôi thích bạn không?')">
-    💖 Bạn nghĩ tôi thích bạn không?
+  <button class="answer" disabled onclick="chooseAnswer('a2.html','B')">
+    💖 Bạn nghĩ tớ thích bạn không?
   </button>
 
-  <button class="answer-btn"
-    onclick="chooseAnswer('a3_q0.html','BFF')">
-    🌙 BFF – huynh đệ
+  <button class="answer" disabled onclick="chooseAnswer('a3.html','C')">
+    🤝 BFF, cốt xương máu?
+  </button>
+</div>– huynh đệ
   </button>
 </div>
 
@@ -175,3 +176,18 @@ animate();
 
 </body>
 </html>
+<script>
+function saveName() {
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) {
+    alert("Nhập tên trước đã 😑");
+    return;
+  }
+
+  localStorage.setItem("username", name);
+
+  document.querySelectorAll(".answer").forEach(btn => {
+    btn.disabled = false;
+  });
+}
+    </script>
