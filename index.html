@@ -2,40 +2,18 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Câu hỏi bí mật 🌌</title>
+<title>Câu hỏi 🌌</title>
 <link rel="stylesheet" href="style.css">
 <style>
 body {
   margin: 0;
-  font-family: sans-serif;
   background: black;
   color: white;
+  font-family: sans-serif;
   overflow: hidden;
 }
 
-.name-box {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-.name-box input {
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-}
-
-.name-box button {
-  padding: 8px 12px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-}
-
 .box {
-  position: relative;
   max-width: 420px;
   margin: 140px auto;
   background: rgba(0,0,0,0.6);
@@ -44,21 +22,26 @@ body {
   text-align: center;
 }
 
-.box img {
-  width: 100%;
-  border-radius: 12px;
+.name-box {
   margin-bottom: 15px;
 }
 
-.box button {
-  display: block;
+.name-box input,
+.name-box button {
   width: 100%;
-  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 8px;
+}
+
+.box button {
+  width: 100%;
   padding: 12px;
+  margin: 8px 0;
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  font-size: 15px;
 }
 
 canvas {
@@ -71,6 +54,8 @@ canvas {
 </head>
 
 <body>
+
+<canvas id="stars"></canvas>
 
 <div class="box">
 
@@ -87,19 +72,20 @@ canvas {
     🌟 Chỉ là bạn bình thường thôi? 😁
   </button>
 
-  <button onclick="chooseAnswer('a2_q0.html','Bạn thích tôi không?')">
+  <button onclick="chooseAnswer('a2_q0.html','Bạn nghĩ tôi thích bạn không?')">
     💖 Bạn nghĩ tôi thích bạn không?
   </button>
 
-  <button onclick="chooseAnswer('a3_q0.html','BFF')">
+  <button onclick="chooseAnswer('a3_q0.html','BFF, cốt xương máu, huynh đệ')">
     🌙 BFF, cốt xương máu, huynh đệ?
   </button>
 
 </div>
 
-<!-- LOGIC -->
+<!-- LOGIC GOOGLE FORM -->
 <script>
-const SHEET_URL = "https://gherman-22.github.io/Bi-mat";
+const FORM_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
 function saveName() {
   const name = document.getElementById("name").value.trim();
@@ -112,22 +98,19 @@ function saveName() {
 }
 
 function chooseAnswer(page, answer) {
-  const name = localStorage.getItem("userName");
-  if (!name) {
-    alert("⚠️ Vui lòng nhập tên trước!");
-    return;
-  }
+  const name = localStorage.getItem("userName") || "Ẩn danh";
 
-  fetch(SHEET_URL, {
+  const data = new URLSearchParams();
+  data.append("entry.1397404752", name);    // Name
+  data.append("entry.1575105345", answer);  // Đáp án
+
+  fetch(FORM_URL, {
     method: "POST",
-    body: JSON.stringify({
-      name: name,
-      answer: answer,
-      page: page
-    })
-  }).finally(() => {
-    location.href = page;
+    mode: "no-cors",
+    body: data
   });
+
+  location.href = page;
 }
 </script>
 
