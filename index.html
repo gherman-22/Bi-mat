@@ -102,10 +102,8 @@ function unlockAnswers() {
 
 /* ===== LOAD TRANG ===== */
 window.addEventListener("DOMContentLoaded", () => {
+  localStorage.removeItem("userName"); // ⬅ DÒNG CẦN THÊM
   lockAnswers();
-  if (localStorage.getItem("userName")) {
-    unlockAnswers();
-  }
 });
 
 /* ===== LƯU TÊN ===== */
