@@ -3,127 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <title>Câu hỏi</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: black;
-  color: white;
-  overflow: hidden;
-}
-
-canvas {
-  position: fixed;
-  inset: 0;
-}
-
-.box {
-  position: relative;
-  z-index: 2;
-  width: 320px;
-  margin: 120px auto;
-  padding: 20px;
-  background: rgba(0,0,0,0.7);
-  border-radius: 12px;
-  text-align: center;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border: none;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-}
-
-.answer-btn:disabled {
-  opacity: 0.4;
-  pointer-events: none;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <canvas id="stars"></canvas>
- <div class="name-box">
-  <input
-    type="text"
-    id="nameInput"
-    placeholder="Nhập tên của bạn..."
-  >
-  <button onclick="saveName()">Xác nhận</button>
-</div>
 
-<div class="question-box">
-  <h2>Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h2>
+<div class="container">
 
-  <button class="answer" disabled onclick="chooseAnswer('a1.html','A')">
-    ⭐ Chỉ là bạn bình thường thôi?
-  </button>
+  <div class="name-box">
+    <input id="nameInput" type="text" placeholder="Nhập tên của bạn..." />
+    <button onclick="saveName()">Xác nhận tên</button>
+  </div>
 
-  <button class="answer" disabled onclick="chooseAnswer('a2.html','B')">
-    💖 Bạn nghĩ tớ thích bạn không?
-  </button>
+  <div class="question-box">
+    <h2>🌌 Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h2>
 
-  <button class="answer" disabled onclick="chooseAnswer('a3.html','C')">
-    🤝 BFF, cốt xương máu?
-  </button>
-</div>– huynh đệ
-  </button>
+    <button onclick="chooseAnswer('Chỉ là bạn')">🌟 Chỉ là bạn</button>
+    <button onclick="chooseAnswer('Có cảm tình')">💖 Có cảm tình</button>
+    <button onclick="chooseAnswer('Bạn thân')">🌙 Bạn thân</button>
+  </div>
+
 </div>
 
 <script>
-/* ===== GOOGLE FORM (ĐÃ ĐIỀN) ===== */
 const FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
-/* ===== KHÓA / MỞ ĐÁP ÁN ===== */
-function lockAnswers() {
-  document.querySelectorAll(".answer-btn").forEach(btn => {
-    btn.disabled = true;
-  });
-}
+// 🔴 THAY 2 ID NÀY BẰNG ENTRY CỦA BẠN
+const ENTRY_NAME = "entry.1397404752";
+const ENTRY_ANSWER = "entry.1575105345";
 
-function unlockAnswers() {
-  document.querySelectorAll(".answer-btn").forEach(btn => {
-    btn.disabled = false;
-  });
-}
-
-/* ===== LOAD TRANG ===== */
-window.addEventListener("DOMContentLoaded", () => {
-  localStorage.removeItem("userName"); // ⬅ DÒNG CẦN THÊM
-  lockAnswers();
-});
-
-/* ===== LƯU TÊN ===== */
 function saveName() {
   const name = document.getElementById("nameInput").value.trim();
-  if (!name) return;
-
+  if (!name) {
+    alert("⚠️ Bạn phải nhập tên trước!");
+    return;
+  }
   localStorage.setItem("userName", name);
-  unlockAnswers();
+  alert("✅ Đã lưu tên: " + name);
 }
 
-/* ===== CHỌN ĐÁP ÁN ===== */
-function chooseAnswer(page, answer) {
+function chooseAnswer(answer) {
   const name = localStorage.getItem("userName");
-  if (!name) return;
 
-  const data = new URLSearchParams();
-  data.append("entry.1397404752", name);    // TÊN
-  data.append("entry.1575105345", answer); // ĐÁP ÁN
+  if (!name) {
+    alert("⚠️ Vui lòng nhập và xác nhận tên trước!");
+    return;
+  }
+
+  const data = new FormData();
+  data.append(ENTRY_NAME, name);
+  data.append(ENTRY_ANSWER, answer);
 
   fetch(FORM_URL, {
     method: "POST",
@@ -131,44 +62,42 @@ function chooseAnswer(page, answer) {
     body: data
   });
 
-  location.href = page;
+  alert("💌 Cảm ơn bạn đã trả lời");
 }
 </script>
 
 <script>
-/* ===== BACKGROUND SAO ===== */
+/* ===== CANVAS SAO (KHÔNG CHẶN INPUT) ===== */
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 
-function resize(){
+function resize() {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
 }
 resize();
 addEventListener("resize", resize);
 
-const stars = Array.from({length:100}, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  r: Math.random()*1.5 + 0.5,
-  s: Math.random()*0.5 + 0.2
+const stars = Array.from({ length: 120 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 1.5 + 0.5,
+  s: Math.random() * 0.5 + 0.2
 }));
 
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
-
-  stars.forEach(star=>{
+  stars.forEach(star => {
     star.y += star.s;
-    if(star.y > canvas.height){
+    if (star.y > canvas.height) {
       star.y = 0;
-      star.x = Math.random()*canvas.width;
+      star.x = Math.random() * canvas.width;
     }
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.r, 0, Math.PI*2);
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
     ctx.fill();
   });
-
   requestAnimationFrame(animate);
 }
 animate();
@@ -176,18 +105,3 @@ animate();
 
 </body>
 </html>
-<script>
-function saveName() {
-  const name = document.getElementById("nameInput").value.trim();
-  if (!name) {
-    alert("Nhập tên trước đã 😑");
-    return;
-  }
-
-  localStorage.setItem("username", name);
-
-  document.querySelectorAll(".answer").forEach(btn => {
-    btn.disabled = false;
-  });
-}
-    </script>
