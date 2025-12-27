@@ -71,9 +71,12 @@ fetch(formURL,{
   mode:"no-cors",
   body:data
 });
+setTimeout(() => {
+  localStorage.clear();
+}, 3000);
+  
 </script>
   
-
 </body>
 <script>
 const canvas = document.getElementById("stars");
