@@ -3,63 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <title>Câu hỏi</title>
-<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+    overflow: hidden;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  .box {
+    max-width: 420px;
+    margin: 120px auto;
+    padding: 25px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  input {
+    width: 90%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 10px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  button.answer:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+</style>
 </head>
+
 <body>
 
-<!-- NỀN SAO -->
 <canvas id="stars"></canvas>
 
-<div class="container">
+<div class="box">
+  <h2>🌌 Bạn tên là gì?</h2>
 
-  <!-- NHẬP TÊN -->
-  <div class="name-box">
-    <input
-      id="nameInput"
-      type="text"
-      placeholder="Nhập tên của bạn..."
-    />
-    <button onclick="saveName()">Xác nhận tên</button>
-  </div>
+  <input id="nameInput" placeholder="Nhập tên của bạn...">
+  <button onclick="saveName()">✅ Xác nhận tên</button>
 
-  <!-- CÂU HỎI -->
-  <div class="question-box">
-    <h2>🌌 Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h2>
+  <h3 style="margin-top:20px;">❓ Bạn nghĩ sao về mối quan hệ của 2 chúng ta?</h3>
 
-    <button class="answer" onclick="chooseAnswer('a1.html','Chỉ là bạn')" disabled>
-      🌟 Chỉ là bạn
-    </button>
+  <button class="answer" onclick="chooseAnswer('a1.html','Chỉ là bạn')">
+    🌟 Chỉ là bạn
+  </button>
 
-    <button class="answer" onclick="chooseAnswer('a2.html','Có cảm tình')" disabled>
-      💖 Có cảm tình
-    </button>
+  <button class="answer" onclick="chooseAnswer('a2.html','Có cảm tình')">
+    💖 Có cảm tình
+  </button>
 
-    <button class="answer" onclick="chooseAnswer('a3.html','Bạn thân')" disabled>
-      🌙 Bạn thân
-    </button>
-  </div>
-
+  <button class="answer" onclick="chooseAnswer('a3.html','Bạn thân')">
+    🌙 Bạn thân
+  </button>
 </div>
 
-<!-- ===== LOGIC ===== -->
 <script>
+/* ================== GOOGLE FORM ================== */
 const FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
 const ENTRY_NAME = "entry.1397404752";
 const ENTRY_ANSWER = "entry.1575105345";
 
+/* ================== KHOÁ / MỞ ================== */
+function lockAnswers() {
+  document.querySelectorAll(".answer").forEach(btn => {
+    btn.disabled = true;
+  });
+}
+
+function unlockAnswers() {
+  document.querySelectorAll(".answer").forEach(btn => {
+    btn.disabled = false;
+  });
+}
+
+/* ================== LOAD TRANG ================== */
+window.addEventListener("DOMContentLoaded", () => {
+  lockAnswers();                 // 👉 luôn khoá khi vào
+  localStorage.removeItem("userName"); // 👉 reset mỗi lần vào
+});
+
+/* ================== LƯU TÊN ================== */
 function saveName() {
   const name = document.getElementById("nameInput").value.trim();
+
   if (!name) {
     alert("⚠️ Bạn phải nhập tên trước!");
     return;
   }
+
   localStorage.setItem("userName", name);
   unlockAnswers();
   alert("✅ Đã lưu tên: " + name);
 }
 
+/* ================== CHỌN ĐÁP ÁN ================== */
 function chooseAnswer(page, answer) {
   const name = localStorage.getItem("userName");
 
@@ -78,34 +138,14 @@ function chooseAnswer(page, answer) {
     body: data
   });
 
-  // chuyển trang như cũ
   setTimeout(() => {
     location.href = page;
   }, 300);
 }
-
-function lockAnswers() {
-  document.querySelectorAll(".answer").forEach(btn => {
-    btn.disabled = true; // Tất cả nút sẽ bị vô hiệu hóa
-  });
-}
-
-function unlockAnswers() {
-  document.querySelectorAll(".answer").forEach(btn => {
-    btn.disabled = false; // Mở lại các nút đáp án
-  });
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  lockAnswers();  // Khóa nút đáp án khi mới vào
-  if (localStorage.getItem("userName")) {
-    unlockAnswers();  // Mở khóa nút khi tên đã được xác nhận
-  }
-});
 </script>
 
-<!-- ===== CANVAS SAO (KHÔNG CHẶN INPUT) ===== -->
 <script>
+/* ================== CANVAS BACKGROUND ================== */
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 
@@ -120,12 +160,13 @@ const stars = Array.from({ length: 120 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
   r: Math.random() * 1.5 + 0.5,
-  s: Math.random() * 0.5 + 0.2
+  s: Math.random() * 0.6 + 0.2
 }));
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
+
   stars.forEach(star => {
     star.y += star.s;
     if (star.y > canvas.height) {
@@ -136,10 +177,11 @@ function animate() {
     ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
     ctx.fill();
   });
+
   requestAnimationFrame(animate);
 }
 animate();
 </script>
 
 </body>
-</html>
+  </html>
