@@ -63,69 +63,78 @@ body {
 
 <body>
 
-<!-- ===== CHAT ===== -->
+<!-- CHAT -->
 <div id="chat-content"></div>
 
-<!-- ===== MƯA ===== -->
+<!-- MƯA -->
 <div id="love-rain"></div>
 
-<!-- ===== NHẠC NỀN ===== -->
+<!-- NHẠC -->
 <audio id="bg-music" loop>
-  <source src="Rum-om-tron-thuong-yeu.mp3" type="audio/mpeg">
+  <source src="rum-om-tron-thuong-yeu.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-/* ===== DANH SÁCH TIN NHẮN (BẠN TỰ SỬA Ở ĐÂY) ===== */
-const messages = [
-  "tao chỉ muốn nói một diều thôi.."
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ===== CHAT ===== */
+  const messages = [
+    "tao chỉ muốn nói một diều thôi.."
   "tao không biết tao thích mày hồi nào"
   "nhưng tao biết tao có thể không thành công"
   "cũng mong mày đáp lại lời này của tao"
   "tao thích mày 💖"
-];
+  ];
 
-const chatBox = document.getElementById("chat-content");
+  const chatBox = document.getElementById("chat-content");
 
-/* ===== CHAT NGẪU NHIÊN LẶP LẠI ===== */
-function showRandomMessage() {
-  const msg = document.createElement("div");
-  msg.className = "message";
-  msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+  function addMessage(text) {
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.innerText = text;
+    chatBox.appendChild(msg);
 
-  chatBox.appendChild(msg);
-
-  // Giữ tối đa 6 tin nhắn
-  if (chatBox.children.length > 6) {
-    chatBox.removeChild(chatBox.firstChild);
+    if (chatBox.children.length > 6) {
+      chatBox.removeChild(chatBox.firstChild);
+    }
   }
-}
 
-setInterval(showRandomMessage, 2500);
+  // Tin nhắn đầu tiên (QUAN TRỌNG)
+  addMessage(messages[0]);
 
-/* ===== MƯA I LOVE YOU ===== */
-const loveChars = ["I","L","O","V","E","Y","O","U","💖"];
-const rainBox = document.getElementById("love-rain");
+  setInterval(() => {
+    const random = messages[Math.floor(Math.random() * messages.length)];
+    addMessage(random);
+  }, 2500);
 
-function createLoveRain() {
-  const span = document.createElement("span");
-  span.className = "love-char";
-  span.innerText = loveChars[Math.floor(Math.random() * loveChars.length)];
+  /* ===== MƯA ===== */
+  const loveChars = ["I","L","O","V","E","Y","O","U","💖"];
+  const rainBox = document.getElementById("love-rain");
 
-  span.style.left = Math.random() * window.innerWidth + "px";
-  span.style.fontSize = (20 + Math.random()*20) + "px";
-  span.style.animationDuration = (3 + Math.random()*3) + "s";
+  function createLoveRain() {
+    const span = document.createElement("span");
+    span.className = "love-char";
+    span.innerText = loveChars[Math.floor(Math.random() * loveChars.length)];
 
-  rainBox.appendChild(span);
-  setTimeout(() => span.remove(), 6000);
-}
+    span.style.left = Math.random() * window.innerWidth + "px";
+    span.style.fontSize = (20 + Math.random()*20) + "px";
+    span.style.animationDuration = (3 + Math.random()*3) + "s";
 
-setInterval(createLoveRain, 200);
+    rainBox.appendChild(span);
+    setTimeout(() => span.remove(), 6000);
+  }
 
-/* ===== PHÁT NHẠC SAU KHI CLICK ===== */
-document.body.addEventListener("click", () => {
+  setInterval(createLoveRain, 200);
+
+  /* ===== NHẠC (CLICK MỚI CHẠY) ===== */
   const music = document.getElementById("bg-music");
-  music.play().catch(()=>{});
-}, { once: true });
+  music.volume = 0.3;
+
+  document.body.addEventListener("click", () => {
+    music.play().catch(()=>{});
+  }, { once: true });
+
+});
 </script>
 
 </body>
