@@ -12,8 +12,8 @@
   
   <h2>Bạn có hay nghĩ về mình không?</h2>
 
-<button onclick="save('rất thích','a2_q1.html')">rất thích</button>
-<button onclick="save('bình thường','a3_end.html')">bình thường</button>
+<button onclick="save('rất thích','a2_q1.html')">rất thích 😆</button>
+<button onclick="save('bình thường','a3_end.html')">bình thường 😀</button>
 </div>
 <script>
 function save(answer,nextPage){
@@ -23,7 +23,40 @@ function save(answer,nextPage){
   window.location.href = nextPage;
 }
 </script>
+<script>
+/* ===== GOOGLE FORM ===== */
+const FORM_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSdX53A-IHszcg-A8ogaHCeEZyz1I9KwcqeNR9RZCtWSEaZ7Zw/formResponse";
 
+const ENTRY_NAME = "entry.1397404752";
+const ENTRY_ANSWER = "entry.1575105345";
+
+/* ===== GỬI + CHUYỂN TRANG ===== */
+function sendAnswer(answer, nextPage) {
+  const name = localStorage.getItem("userName");
+
+  if (!name) {
+    // phòng hờ (dù index đã chặn)
+    location.href = "index.html";
+    return;
+  }
+
+  const data = new FormData();
+  data.append(ENTRY_NAME, name);
+  data.append(ENTRY_ANSWER, answer);
+
+  fetch(FORM_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: data
+  });
+
+  // 👉 CHUYỂN TRANG (GIỐNG INDEX)
+  setTimeout(() => {
+    location.href = nextPage;
+  }, 300);
+}
+</script>
 </body>
   <script>
 const canvas = document.getElementById("stars");
