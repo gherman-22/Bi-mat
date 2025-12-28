@@ -54,3 +54,16 @@ button {
   border: none;
   cursor: pointer;
 }
+.box {
+  position: relative; /* BẮT BUỘC */
+}
+
+.editor-credit {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 11px;
+  opacity: 0.5;
+  pointer-events: none;
+  font-style: italic;
+  }
