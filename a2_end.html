@@ -5,7 +5,6 @@
 <title>Kết thúc</title>
 
 <style>
-/* ===== BODY ===== */
 body {
   margin: 0;
   background: black;
@@ -14,25 +13,43 @@ body {
   overflow: hidden;
 }
 
-/* ===== LỚP MƯA ===== */
+/* ===== KHUNG CHAT ===== */
+#chat-content {
+  position: relative;
+  z-index: 10;
+  max-width: 420px;
+  margin: 120px auto;
+  padding: 25px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.08);
+}
+
+.message {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeIn 0.6s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ===== MƯA ===== */
 #love-rain {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
-  overflow: hidden;
-  z-index: 1; /* 👈 nằm SAU tin nhắn */
+  z-index: 1;
 }
 
 .love-char {
   position: absolute;
   top: -50px;
-  font-size: 26px;
   color: #ff69b4;
+  font-size: 26px;
   animation: fall linear forwards;
-  user-select: none;
 }
 
 @keyframes fall {
@@ -41,44 +58,52 @@ body {
     opacity: 0;
   }
 }
-
-/* ===== KHUNG TIN NHẮN ===== */
-#chat-content {
-  position: relative;
-  z-index: 10; /* 👈 nằm TRƯỚC mưa */
-  max-width: 420px;
-  margin: 120px auto;
-  padding: 25px;
-  background: rgba(0,0,0,0.7);
-  border-radius: 14px;
-  text-align: left;
-  box-shadow: 0 0 20px rgba(255,255,255,0.08);
-}
-
-.message {
-  margin-bottom: 12px;
-  line-height: 1.6;
-}
 </style>
 </head>
 
 <body>
 
-<!-- ===== KHUNG TIN NHẮN (GIỮ / THAY NỘI DUNG Ở ĐÂY) ===== -->
-<div id="chat-content">
-  <!-- 🔽🔽🔽 THAY NỘI DUNG TIN NHẮN CỦA BẠN TẠI ĐÂY 🔽🔽🔽 -->
-  <div class="message">Mình đã suy nghĩ rất nhiều…</div>
-  <div class="message">Không biết phải nói sao cho đúng,</div>
-  <div class="message">nhưng cảm xúc này là thật.</div>
-  <div class="message">Cảm ơn bạn vì đã đọc đến đây 💙</div>
-  <!-- 🔼🔼🔼 HẾT PHẦN NỘI DUNG 🔼🔼🔼 -->
-</div>
+<!-- ===== CHAT ===== -->
+<div id="chat-content"></div>
 
-<!-- ===== LỚP MƯA ===== -->
+<!-- ===== MƯA ===== -->
 <div id="love-rain"></div>
 
-<!-- ===== SCRIPT MƯA I LOVE YOU ===== -->
+<!-- ===== NHẠC NỀN ===== -->
+<audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+/* ===== DANH SÁCH TIN NHẮN (BẠN TỰ SỬA Ở ĐÂY) ===== */
+const messages = [
+  "Mình đã nghĩ rất lâu trước khi làm điều này…",
+  "Không biết bạn có cảm nhận được không.",
+  "Nhưng mình thật sự trân trọng bạn.",
+  "Có thể mình không hoàn hảo.",
+  "Nhưng cảm xúc này là thật.",
+  "Cảm ơn vì đã ở đây 💙"
+];
+
+const chatBox = document.getElementById("chat-content");
+
+/* ===== CHAT NGẪU NHIÊN LẶP LẠI ===== */
+function showRandomMessage() {
+  const msg = document.createElement("div");
+  msg.className = "message";
+  msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+  chatBox.appendChild(msg);
+
+  // Giữ tối đa 6 tin nhắn
+  if (chatBox.children.length > 6) {
+    chatBox.removeChild(chatBox.firstChild);
+  }
+}
+
+setInterval(showRandomMessage, 2500);
+
+/* ===== MƯA I LOVE YOU ===== */
 const loveChars = ["I","L","O","V","E","Y","O","U","💖"];
 const rainBox = document.getElementById("love-rain");
 
@@ -88,17 +113,20 @@ function createLoveRain() {
   span.innerText = loveChars[Math.floor(Math.random() * loveChars.length)];
 
   span.style.left = Math.random() * window.innerWidth + "px";
-  span.style.fontSize = (20 + Math.random() * 20) + "px";
-  span.style.animationDuration = (3 + Math.random() * 3) + "s";
+  span.style.fontSize = (20 + Math.random()*20) + "px";
+  span.style.animationDuration = (3 + Math.random()*3) + "s";
 
   rainBox.appendChild(span);
-
-  setTimeout(() => {
-    span.remove();
-  }, 6000);
+  setTimeout(() => span.remove(), 6000);
 }
 
 setInterval(createLoveRain, 200);
+
+/* ===== PHÁT NHẠC SAU KHI CLICK ===== */
+document.body.addEventListener("click", () => {
+  const music = document.getElementById("bg-music");
+  music.play().catch(()=>{});
+}, { once: true });
 </script>
 
 </body>
