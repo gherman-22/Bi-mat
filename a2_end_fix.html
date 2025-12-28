@@ -2,140 +2,174 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Kết thúc</title>
+<title>💖</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="stars"></canvas>
 
+<div class="box">
+  <h3 id="title"></h3>
+  <div id="chaos"></div>
+</div>
+
+<script>
+const name = localStorage.getItem("userName") || "Bạn";
+document.getElementById("title").innerText =
+`${name}, mình thật sự muốn nói…`;
+
+const chaos = document.getElementById("chaos");
+
+setInterval(() => {
+  // tạo tin nhắn
+  const msg = document.createElement("div");
+  msg.className = "chaos-msg";
+  msg.innerText = "💖 Tôi thích cậu";
+
+  // vị trí ngẫu nhiên
+  const x = Math.random() * (chaos.clientWidth - 120);
+  const y = Math.random() * (chaos.clientHeight - 40);
+  msg.style.left = x + "px";
+  msg.style.top = y + "px";
+
+  chaos.appendChild(msg);
+
+  // tạo tim bay
+  for(let i=0;i<3;i++){
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💗";
+    heart.style.left = (x + Math.random()*40) + "px";
+    heart.style.top = (y - 10) + "px";
+    chaos.appendChild(heart);
+
+    setTimeout(()=>heart.remove(),2000);
+  }
+
+}, 700);
+</script>
+  
+<script>
+const formURL =
+"https://docs.google.com/forms/d/e/ID_CUA_BAN/formResponse";
+
+const name = localStorage.getItem("name") || "Ẩn danh";
+const route = localStorage.getItem("route") || "a1";
+const answers = JSON.parse(
+  localStorage.getItem("answers") || "[]"
+).join(" → ");
+
+const data = new FormData();
+data.append("entry.1397404752", name);
+data.append(
+  "entry.1575105345",
+  route + " | " + answers
+);
+
+fetch(formURL,{
+  method:"POST",
+  mode:"no-cors",
+  body:data
+});
+setTimeout(() => {
+  localStorage.clear();
+}, 3000);
+  
+</script>
+  
+</body>
+<script>
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+const stars = Array.from({length:100}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*1.5 + 0.5,
+  s: Math.random()*0.5 + 0.2
+}));
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "white";
+
+  stars.forEach(star=>{
+    star.y += star.s;
+    if(star.y > canvas.height){
+      star.y = 0;
+      star.x = Math.random()*canvas.width;
+    }
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</html>
 <style>
-body {
-  margin: 0;
-  background: black;
-  color: white;
-  font-family: Arial, sans-serif;
+#chaos {
+  position: relative;
+  width: 100%;
+  height: 80vh;
   overflow: hidden;
 }
 
-/* ===== KHUNG CHAT ===== */
-#chat-content {
-  position: relative;
-  z-index: 10;
-  max-width: 420px;
-  margin: 120px auto;
-  padding: 25px;
-  background: rgba(0,0,0,0.7);
-  border-radius: 14px;
-  box-shadow: 0 0 20px rgba(255,255,255,0.08);
-}
-
-.message {
-  margin-bottom: 12px;
-  line-height: 1.6;
-  opacity: 0;
-  animation: fadeIn 0.6s forwards;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/* ===== MƯA ===== */
-#love-rain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.love-char {
+.chaos-msg {
   position: absolute;
-  top: -50px;
-  color: #ff69b4;
-  font-size: 26px;
-  animation: fall linear forwards;
+  background: #ffb6c1;
+  color: #5a0030;
+  padding: 8px 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  animation: pop 0.4s ease;
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
+@keyframes pop {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
-</style>
-</head>
 
-<body>
+/* tim bay */
+.heart {
+  position: absolute;
+  color: #ff4081;
+  animation: floatUp 2s linear forwards;
+  font-size: 16px;
+}
 
-<!-- CHAT -->
-<div id="chat-content"></div>
+@keyframes floatUp {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-80px) scale(1.5); }
+}
 
-<!-- MƯA -->
-<div id="love-rain"></div>
+  .chat{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
 
-<!-- NHẠC -->
-<audio id="bg-music" loop>
-  <source src="rum-om-tron-thuong-yeu.mp3" type="audio/mpeg">
-</audio>
+.msg{
+  background:#ffb6c1;
+  color:#5a0030;
+  padding:8px 12px;
+  border-radius:14px;
+  max-width:70%;
+  align-self:flex-start;
+  animation: fadeIn 0.3s ease;
+}
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* ===== CHAT ===== */
-  const messages = [
-    "tao chỉ muốn nói một diều thôi.."
-  "tao không biết tao thích mày hồi nào"
-  "nhưng tao biết tao có thể không thành công"
-  "cũng mong mày đáp lại lời này của tao"
-  "tao thích mày 💖"
-  ];
-
-  const chatBox = document.getElementById("chat-content");
-
-  function addMessage(text) {
-    const msg = document.createElement("div");
-    msg.className = "message";
-    msg.innerText = text;
-    chatBox.appendChild(msg);
-
-    if (chatBox.children.length > 6) {
-      chatBox.removeChild(chatBox.firstChild);
-    }
-  }
-
-  // Tin nhắn đầu tiên (QUAN TRỌNG)
-  addMessage(messages[0]);
-
-  setInterval(() => {
-    const random = messages[Math.floor(Math.random() * messages.length)];
-    addMessage(random);
-  }, 2500);
-
-  /* ===== MƯA ===== */
-  const loveChars = ["I","L","O","V","E","Y","O","U","💖"];
-  const rainBox = document.getElementById("love-rain");
-
-  function createLoveRain() {
-    const span = document.createElement("span");
-    span.className = "love-char";
-    span.innerText = loveChars[Math.floor(Math.random() * loveChars.length)];
-
-    span.style.left = Math.random() * window.innerWidth + "px";
-    span.style.fontSize = (20 + Math.random()*20) + "px";
-    span.style.animationDuration = (3 + Math.random()*3) + "s";
-
-    rainBox.appendChild(span);
-    setTimeout(() => span.remove(), 6000);
-  }
-
-  setInterval(createLoveRain, 200);
-
-  /* ===== NHẠC (CLICK MỚI CHẠY) ===== */
-  const music = document.getElementById("bg-music");
-  music.volume = 0.3;
-
-  document.body.addEventListener("click", () => {
-    music.play().catch(()=>{});
-  }, { once: true });
-
-});
-</script>
-
-</body>
-</html>
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(6px);}
+  to{opacity:1;transform:translateY(0);}
+}
