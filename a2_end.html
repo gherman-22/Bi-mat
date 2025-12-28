@@ -2,63 +2,19 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>💖</title>
-  <style>
-#chaos {
-  position: relative;
-  width: 100%;
-  height: 80vh;
+<title>Kết thúc</title>
+
+<style>
+/* ===== BODY ===== */
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
   overflow: hidden;
 }
 
-.chaos-msg {
-  position: absolute;
-  background: #ffb6c1;
-  color: #5a0030;
-  padding: 8px 14px;
-  border-radius: 16px;
-  font-size: 15px;
-  animation: pop 0.4s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(0.6); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-
-/* tim bay */
-.heart {
-  position: absolute;
-  color: #ff4081;
-  animation: floatUp 2s linear forwards;
-  font-size: 16px;
-}
-
-@keyframes floatUp {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to   { opacity: 0; transform: translateY(-80px) scale(1.5); }
-}
-
-  .chat{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.msg{
-  background:#ffb6c1;
-  color:#5a0030;
-  padding:8px 12px;
-  border-radius:14px;
-  max-width:70%;
-  align-self:flex-start;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(6px);}
-  to{opacity:1;transform:translateY(0);}
-}
+/* ===== LỚP MƯA ===== */
 #love-rain {
   position: fixed;
   top: 0;
@@ -67,13 +23,13 @@
   height: 100%;
   pointer-events: none;
   overflow: hidden;
-  z-index: 9999;
+  z-index: 1; /* 👈 nằm SAU tin nhắn */
 }
 
 .love-char {
   position: absolute;
   top: -50px;
-  font-size: 24px;
+  font-size: 26px;
   color: #ff69b4;
   animation: fall linear forwards;
   user-select: none;
@@ -84,146 +40,66 @@
     transform: translateY(110vh);
     opacity: 0;
   }
-  }
- </style>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="love-rain"></div>
-  <canvas id="stars"></canvas>
+}
 
-<div class="box">
-  <h3 id="title"></h3>
-  <div id="chaos"></div>
+/* ===== KHUNG TIN NHẮN ===== */
+#chat-content {
+  position: relative;
+  z-index: 10; /* 👈 nằm TRƯỚC mưa */
+  max-width: 420px;
+  margin: 120px auto;
+  padding: 25px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 14px;
+  text-align: left;
+  box-shadow: 0 0 20px rgba(255,255,255,0.08);
+}
+
+.message {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== KHUNG TIN NHẮN (GIỮ / THAY NỘI DUNG Ở ĐÂY) ===== -->
+<div id="chat-content">
+  <!-- 🔽🔽🔽 THAY NỘI DUNG TIN NHẮN CỦA BẠN TẠI ĐÂY 🔽🔽🔽 -->
+  <div class="message">Mình đã suy nghĩ rất nhiều…</div>
+  <div class="message">Không biết phải nói sao cho đúng,</div>
+  <div class="message">nhưng cảm xúc này là thật.</div>
+  <div class="message">Cảm ơn bạn vì đã đọc đến đây 💙</div>
+  <!-- 🔼🔼🔼 HẾT PHẦN NỘI DUNG 🔼🔼🔼 -->
 </div>
 
+<!-- ===== LỚP MƯA ===== -->
+<div id="love-rain"></div>
+
+<!-- ===== SCRIPT MƯA I LOVE YOU ===== -->
 <script>
-const name = localStorage.getItem("userName") || "Bạn";
-document.getElementById("title").innerText =
-`${name}, mình thật sự muốn nói…`;
+const loveChars = ["I","L","O","V","E","Y","O","U","💖"];
+const rainBox = document.getElementById("love-rain");
 
-const chaos = document.getElementById("chaos");
+function createLoveRain() {
+  const span = document.createElement("span");
+  span.className = "love-char";
+  span.innerText = loveChars[Math.floor(Math.random() * loveChars.length)];
 
-setInterval(() => {
-  // tạo tin nhắn
-  const msg = document.createElement("div");
-  msg.className = "chaos-msg";
-  msg.innerText = "💖 Tôi thích cậu";
+  span.style.left = Math.random() * window.innerWidth + "px";
+  span.style.fontSize = (20 + Math.random() * 20) + "px";
+  span.style.animationDuration = (3 + Math.random() * 3) + "s";
 
-  // vị trí ngẫu nhiên
-  const x = Math.random() * (chaos.clientWidth - 120);
-  const y = Math.random() * (chaos.clientHeight - 40);
-  msg.style.left = x + "px";
-  msg.style.top = y + "px";
+  rainBox.appendChild(span);
 
-  chaos.appendChild(msg);
-
-  // tạo tim bay
-  for(let i=0;i<3;i++){
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerText = "💗";
-    heart.style.left = (x + Math.random()*40) + "px";
-    heart.style.top = (y - 10) + "px";
-    chaos.appendChild(heart);
-
-    setTimeout(()=>heart.remove(),2000);
-  }
-
-}, 700);
-#love-rain {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 9999;
+  setTimeout(() => {
+    span.remove();
+  }, 6000);
 }
 
-.love-char {
-  position: absolute;
-  top: -50px;
-  font-size: 24px;
-  color: #ff69b4;
-  animation: fall linear forwards;
-  user-select: none;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-      }
+setInterval(createLoveRain, 200);
 </script>
-  
-<script>
-const formURL =
-"https://docs.google.com/forms/d/e/ID_CUA_BAN/formResponse";
 
-const name = localStorage.getItem("name") || "Ẩn danh";
-const route = localStorage.getItem("route") || "a1";
-const answers = JSON.parse(
-  localStorage.getItem("answers") || "[]"
-).join(" → ");
-
-const data = new FormData();
-data.append("entry.1397404752", name);
-data.append(
-  "entry.1575105345",
-  route + " | " + answers
-);
-
-fetch(formURL,{
-  method:"POST",
-  mode:"no-cors",
-  body:data
-});
-setTimeout(() => {
-  localStorage.clear();
-}, 3000);
-  
-</script>
-  
 </body>
-<script>
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-
-function resize(){
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-}
-resize();
-addEventListener("resize", resize);
-
-const stars = Array.from({length:100}, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  r: Math.random()*1.5 + 0.5,
-  s: Math.random()*0.5 + 0.2
-}));
-
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "white";
-
-  stars.forEach(star=>{
-    star.y += star.s;
-    if(star.y > canvas.height){
-      star.y = 0;
-      star.x = Math.random()*canvas.width;
-    }
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.r, 0, Math.PI*2);
-    ctx.fill();
-  });
-
-  requestAnimationFrame(animate);
-}
-animate();
-</script>
-
 </html>
